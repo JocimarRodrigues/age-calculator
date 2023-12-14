@@ -1,27 +1,80 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <section class="container">
+    <FormComponent @form-submit="handleFormSubmit"/>
+    <ResultComponent v-if="data !== null" :formData="data"/>
+  </section>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import { defineComponent, ref } from 'vue';
+import FormComponent from './components/FormComponent.vue';
+import ResultComponent from './components/ResultComponent.vue';
+
 
 export default defineComponent({
   name: 'App',
   components: {
-    HelloWorld
+    FormComponent,
+    ResultComponent
+},
+emits: ['form-submit'],
+setup() {
+  let data = ref(null)
+  const handleFormSubmit = (formData: any) => {
+    data.value = formData
+    // console.log(data.value)
+  } 
+
+
+
+
+
+  return {
+    handleFormSubmit,
+    data
   }
+}
+
 });
 </script>
 
 <style lang="scss">
+@import "styles/variables";
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+
 #app {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  background: $Light-grey;
+
+}
+
+.container {
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  background-color: $White;
+  width: 600px;
+  border-radius: 1rem 1rem 10rem .1rem;
+
+  input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
 }
 </style>
