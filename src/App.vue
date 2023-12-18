@@ -9,6 +9,7 @@
 import { defineComponent, ref } from 'vue';
 import FormComponent from './components/FormComponent.vue';
 import ResultComponent from './components/ResultComponent.vue';
+import { IFormData } from './interfaces/IFormData';
 
 
 export default defineComponent({
@@ -19,8 +20,8 @@ export default defineComponent({
 },
 emits: ['form-submit'],
 setup() {
-  let data = ref(null)
-  const handleFormSubmit = (formData: any) => {
+  let data = ref({})
+  const handleFormSubmit = (formData: IFormData) => {
     data.value = formData
     // console.log(data.value)
   } 

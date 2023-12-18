@@ -6,21 +6,21 @@
                     <label for="day">
                         Day
                     </label>
-                    <input type="number" placeholder="DD" id="day" v-model="formData.day" required>
+                    <input type="number" placeholder="DD" id="day" v-model="day" required>
                     <small v-if="formError">{{ formError.day }}</small>
                 </div>
                 <div class="block">
                     <label for="month">
                         Month
                     </label>
-                    <input type="number" placeholder="MM" id="month" v-model="formData.month" required>
+                    <input type="number" placeholder="MM" id="month" v-model="month" required>
                     <small v-if="formError">{{ formError.month }}</small>
                 </div>
                 <div class="block">
                     <label for="year">
                         Year
                     </label>
-                    <input type="number" placeholder="YYYY" id="year" v-model="formData.year" required>
+                    <input type="number" placeholder="YYYY" id="year" v-model="year" required>
                     <small v-if="formError">{{ formError.year }}</small>
                 </div>
             </div>
@@ -39,45 +39,49 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-
-export interface FormData {
-    day: number | null,
-    month: number | null,
-    year: number | null
-}
-
-
+import { IFormData } from '../interfaces/IFormData'
+import {IFormError} from '../interfaces/IFormError'
 
 export default defineComponent({
     name: "FormComponent",
     emits: ['form-submit'], // Declare o evento form-submit aqui
     setup(_, { emit }) {
-        const formData = ref<FormData>({
-            day: null,
-            month: null,
-            year: null
+        const formData = ref<IFormData>({
+            day: 0,
+            month: 0,
+            year: 0
         })
 
-        const formError = ref({
+        const day = ref<number | null>(null)
+        const month = ref<number | null>(null)
+        const year = ref<number | null>(null)
+
+        const formError = ref<IFormError>({
             day: '',
             month: '',
             year: ''
         })
 
         const onSubmit = () => {
-            if (formData.value.day != null && formData.value.month != null && formData.value.year != null) {
-                formError.value.day = formData.value.day >= 1 && formData.value.day <= 31 ? '' : 'Precisa ser uma data válida'
-                formError.value.month = formData.value.month >= 1 && formData.value.month <= 12 ? '' : 'Precisa ser uma data válida'
-                formError.value.year = formData.value.year >= 1 && formData.value.year <= 2023 ? '' : 'Precisa ser uma data válida'
+            formError.value.day = day.value && day.value >= 1 && day.value <= 31 ? '' : 'Precisa ser uma data válida';
+            formError.value.month = month.value && month.value >= 1 && month.value <= 12 ? '' : 'Precisa ser uma data válida';
+            formError.value.year = year.value && year.value >= 1 && year.value <= 2023 ? '' : 'Precisa ser uma data válida';
+
+            if (!formError.value.day && !formError.value.month && !formError.value.year) {
+                const formData: IFormData = {
+                    day: day.value || 0,
+                    month: month.value || 0,
+                    year: year.value || 0
+                };
+
+                emit('form-submit', formData);
             }
 
-            console.log(formError.value.day)
-
-
-
-            emit('form-submit', formData.value)
         }
         return {
+            day,
+            month,
+            year,
             formData,
             onSubmit,
             formError
