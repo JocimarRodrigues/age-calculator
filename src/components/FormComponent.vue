@@ -6,27 +6,27 @@
                     <label for="day">
                         Day
                     </label>
-                    <input type="number" placeholder="DD" id="day" v-model="formData.day">
+                    <input type="number" placeholder="DD" id="day" v-model="formData.day" required>
                     <small v-if="formError">{{ formError.day }}</small>
                 </div>
                 <div class="block">
                     <label for="month">
                         Month
                     </label>
-                    <input type="number" placeholder="MM" id="month">
-                    <small></small>
+                    <input type="number" placeholder="MM" id="month" v-model="formData.month" required>
+                    <small v-if="formError">{{ formError.month }}</small>
                 </div>
                 <div class="block">
                     <label for="year">
                         Year
                     </label>
-                    <input type="number" placeholder="YYYY" id="year">
-                    <small></small>
+                    <input type="number" placeholder="YYYY" id="year" v-model="formData.year" required>
+                    <small v-if="formError">{{ formError.year }}</small>
                 </div>
             </div>
             <div class="submit_block">
                 <hr>
-                <button  type="submit" class="submit_btn"><img src="../assets/images/icon-arrow.svg" alt="icon"></button>
+                <button type="submit" class="submit_btn"><img src="../assets/images/icon-arrow.svg" alt="icon"></button>
             </div>
         </form>
         <div class="output">
@@ -43,7 +43,7 @@ import { defineComponent, ref } from 'vue';
 export interface FormData {
     day: number | null,
     month: number | null,
-    year: number| null
+    year: number | null
 }
 
 
@@ -51,30 +51,31 @@ export interface FormData {
 export default defineComponent({
     name: "FormComponent",
     emits: ['form-submit'], // Declare o evento form-submit aqui
-    setup(_, {emit}) {
+    setup(_, { emit }) {
         const formData = ref<FormData>({
             day: null,
-            month: 0,
-            year: 0
+            month: null,
+            year: null
         })
 
         const formError = ref({
-            day: ''
-           })
+            day: '',
+            month: '',
+            year: ''
+        })
 
         const onSubmit = () => {
+            if (formData.value.day != null && formData.value.month != null && formData.value.year != null) {
+                formError.value.day = formData.value.day >= 1 && formData.value.day <= 31 ? '' : 'Precisa ser uma data válida'
+                formError.value.month = formData.value.month >= 1 && formData.value.month <= 12 ? '' : 'Precisa ser uma data válida'
+                formError.value.year = formData.value.year >= 1 && formData.value.year <= 2023 ? '' : 'Precisa ser uma data válida'
+            }
 
-       
+            console.log(formError.value.day)
 
-           if(formData.value.day && formData.value.month && formData.value.year) {
-           formError.value.day = formData.value.day > 1 && formData.value.day < 31 ? '' : 'Precisa ser uma data válida'
-           }
 
-           console.log(formError.value.day)
 
-   
-
-           emit('form-submit', formData.value)
+            emit('form-submit', formData.value)
         }
         return {
             formData,
@@ -109,6 +110,7 @@ export default defineComponent({
                 flex-direction: column;
 
                 label {
+                    text-align: left;
                     text-transform: uppercase;
                     font-weight: 600;
                 }
@@ -176,6 +178,4 @@ export default defineComponent({
 small {
     color: red;
 }
-
-
 </style>
