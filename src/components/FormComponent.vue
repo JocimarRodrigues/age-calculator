@@ -7,7 +7,7 @@
                         Day
                     </label>
                     <input type="number" placeholder="DD" id="day" v-model="formData.day">
-                    <small></small>
+                    <small v-if="formError">{{ formError.day }}</small>
                 </div>
                 <div class="block">
                     <label for="month">
@@ -58,12 +58,28 @@ export default defineComponent({
             year: 0
         })
 
+        const formError = ref({
+            day: ''
+           })
+
         const onSubmit = () => {
+
+       
+
+           if(formData.value.day && formData.value.month && formData.value.year) {
+           formError.value.day = formData.value.day > 1 && formData.value.day < 31 ? '' : 'Precisa ser uma data válida'
+           }
+
+           console.log(formError.value.day)
+
+   
+
            emit('form-submit', formData.value)
         }
         return {
             formData,
-            onSubmit
+            onSubmit,
+            formError
         }
     }
 })
