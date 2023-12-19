@@ -1,7 +1,7 @@
 <template>
   <section class="container">
     <FormComponent @form-submit="handleFormSubmit"/>
-    <ResultComponent v-if="data !== null" :formData="data"/>
+    <ResultComponent :formData="data"/>
   </section>
 </template>
 
@@ -23,7 +23,6 @@ setup() {
   let data = ref({})
   const handleFormSubmit = (formData: IFormData) => {
     data.value = formData
-    // console.log(data.value)
   } 
 
 

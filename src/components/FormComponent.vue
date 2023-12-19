@@ -29,11 +29,6 @@
                 <button type="submit" class="submit_btn"><img src="../assets/images/icon-arrow.svg" alt="icon"></button>
             </div>
         </form>
-        <div class="output">
-            <h1><span id="YY">--</span>years</h1>
-            <h1><span id="MM">--</span>months</h1>
-            <h1><span id="DD">--</span>days</h1>
-        </div>
     </div>
 </template>
 
@@ -97,7 +92,7 @@ export default defineComponent({
 
 
 .container {
-    padding: 2rem;
+    padding-top: 2rem;
     display: flex;
     flex-direction: column;
 
